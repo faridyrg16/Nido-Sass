@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EduNido — Sistema SaaS freemium de gestión académica para nidos y jardines de infancia en Cusco. Digitaliza matrículas, pagos y horarios en minutos.">
+  <title>EduNido — Gestión Académica para Nidos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-logo">Edu<span>Nido</span></div>
+  <ul class="nav-links">
+    <li><a href="#features">Funciones</a></li>
+    <li><a href="#pricing">Precios</a></li>
+    <li><a href="#testimonios">Testimonios</a></li>
+    <li><a href="#chatbot">Asistente IA</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('chatbot').scrollIntoView({behavior:'smooth'})">
+    Prueba gratis
+  </button>
+</nav>
+
+<!-- ─── HERO ──────────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🌿 Diseñado para nidos de Cusco</div>
+    <h1>Gestión <span class="accent">académica</span> sin fricción para tu nido</h1>
+    <p class="hero-sub">
+      Sistema freemium SaaS que digitaliza matrículas, pagos y horarios en minutos.
+      Sin instalaciones, sin complicaciones — funciona desde el navegador.
+    </p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('chatbot').scrollIntoView({behavior:'smooth'})">
+        Habla con nuestro asistente ✦
+      </button>
+      <button class="btn-secondary" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">
+        Ver planes
+      </button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">~500</div><div class="stat-l">Nidos en Cusco</div></div>
+      <div class="stat"><div class="stat-n">3 min</div><div class="stat-l">Onboarding</div></div>
+      <div class="stat"><div class="stat-n">S/0</div><div class="stat-l">Para empezar</div></div>
+    </div>
+  </div>
+
+  <!-- App mockup visual -->
+  <div class="hero-visual">
+    <div class="app-mockup">
+      <div class="app-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+      </div>
+      <div class="app-header">
+        <div>
+          <div class="app-header-title">Nido Los Girasoles</div>
+          <div class="app-header-sub">Dashboard — Marzo 2025</div>
+        </div>
+        <div class="app-tag">PRO</div>
+      </div>
+      <div class="app-row">
+        <div class="app-card">
+          <div class="app-card-icon">👦</div>
+          <div class="app-card-label">Alumnos activos</div>
+          <div class="app-card-value">48</div>
+        </div>
+        <div class="app-card">
+          <div class="app-card-icon">💰</div>
+          <div class="app-card-label">Cobros este mes</div>
+          <div class="app-card-value">S/3,840</div>
+        </div>
+      </div>
+      <div class="app-row">
+        <div class="app-card">
+          <div class="app-card-icon">📋</div>
+          <div class="app-card-label">Matrículas</div>
+          <div class="app-card-value">12 nuevas</div>
+        </div>
+        <div class="app-card">
+          <div class="app-card-icon">📅</div>
+          <div class="app-card-label">Próximo evento</div>
+          <div class="app-card-value">Jue 20</div>
+        </div>
+      </div>
+      <div style="font-size:0.75rem;color:var(--muted);font-weight:600;margin-bottom:0.6rem">Pagos recientes</div>
+      <div class="app-list-item">
+        <div class="avatar">CM</div>
+        <div><div class="app-name">Carmen Mamani</div><div class="app-role">Aula Mariposas</div></div>
+        <span class="badge-paid">Pagado</span>
+      </div>
+      <div class="app-list-item">
+        <div class="avatar">RP</div>
+        <div><div class="app-name">Rosa Quispe</div><div class="app-role">Aula Estrellas</div></div>
+        <span class="badge-pend">Pendiente</span>
+      </div>
+      <div class="app-list-item">
+        <div class="avatar">JF</div>
+        <div><div class="app-name">Jorge Flores</div><div class="app-role">Aula Soles</div></div>
+        <span class="badge-paid">Pagado</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURES ──────────────────────────────────────────────────────────────── -->
+<section class="section" id="features">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-label">Funcionalidades</div>
+    <div class="section-title">Todo lo que tu nido necesita,<br>sin complicaciones técnicas</div>
+    <p class="section-sub">Tres procesos críticos digitalizados: matrículas, pagos y horarios. Diseñado para directoras con alfabetización digital básica.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📝</div>
+        <div class="feature-title">Matrículas digitales</div>
+        <div class="feature-desc">Registro de alumnos, datos de apoderados y expedientes en un formulario simple. Adiós a los cuadernos y papeles sueltos.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💳</div>
+        <div class="feature-title">Control de pagos</div>
+        <div class="feature-desc">Seguimiento de mensualidades, alertas de morosidad y recibos automáticos por WhatsApp. Cobra más fácil y organizado.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🗓️</div>
+        <div class="feature-title">Horarios y eventos</div>
+        <div class="feature-desc">Gestiona aulas, maestros y actividades desde un calendario visual. Comparte el horario con padres en un clic.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">Funciona desde WhatsApp</div>
+        <div class="feature-desc">Las directoras y padres ya usan WhatsApp. Enviamos notificaciones, cobros y reportes directo al canal que ya conocen.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Reportes automáticos</div>
+        <div class="feature-desc">Cierre mensual, asistencia y flujo de caja generados en segundos. Información lista para UGEL o directorio si la necesitas.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title">Datos seguros en la nube</div>
+        <div class="feature-desc">Sin instalaciones, sin USB perdidos. Toda la información de tu nido está respaldada y accesible desde cualquier dispositivo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRICING ───────────────────────────────────────────────────────────────── -->
+<section class="pricing-section" id="pricing">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-label">Precios</div>
+    <div class="section-title">Empieza gratis, crece cuando estés listo</div>
+    <p class="section-sub">Modelo freemium diseñado para que pruebes el valor sin riesgo. Paga solo cuando veas los resultados.</p>
+    <div class="pricing-grid">
+      <div class="plan-card">
+        <div class="plan-name">Plan Free</div>
+        <div class="plan-price">S/0</div>
+        <div class="plan-period">Siempre gratis · sin tarjeta</div>
+        <div class="plan-feature"><span class="plan-check">✓</span> Hasta 30 alumnos</div>
+        <div class="plan-feature"><span class="plan-check">✓</span> Matrículas y pagos básicos</div>
+        <div class="plan-feature"><span class="plan-check">✓</span> 1 aula / 1 usuario</div>
+        <div class="plan-feature"><span class="plan-check">✓</span> Soporte por WhatsApp</div>
+        <button class="plan-btn secondary">Empezar gratis</button>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-badge">Más popular</div>
+        <div class="plan-name">Plan Pro</div>
+        <div class="plan-price">S/50</div>
+        <div class="plan-period">por mes · sin permanencia</div>
+        <div class="plan-feature"><span class="plan-check">✓</span> Alumnos ilimitados</div>
+        <div class="plan-feature"><span class="plan-check">✓</span> Todas las funciones</div>
+        <div class="plan-feature"><span class="plan-check">✓</span> Múltiples aulas y usuarios</div>
+        <div class="plan-feature"><span class="plan-check">✓</span> Reportes avanzados</div>
+        <div class="plan-feature"><span class="plan-check">✓</span> Soporte VIP prioritario</div>
+        <div class="plan-feature"><span class="plan-check">✓</span> Notificaciones WhatsApp</div>
+        <button class="plan-btn">Obtener Pro</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ──────────────────────────────────────────────────────────── -->
+<section class="testimonial-section" id="testimonios">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-label">Testimonios</div>
+    <div class="section-title">Lo que dicen las directoras de Cusco</div>
+    <div class="testimonials-grid">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <div class="testi-text">"Antes perdía horas buscando recibos en cuadernos. Ahora veo todo en la pantalla y le mando el comprobante a los papás por WhatsApp al instante."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">CM</div>
+          <div><div class="testi-name">Carmen Mamani</div><div class="testi-role">Directora, Nido Los Girasoles · San Sebastián</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <div class="testi-text">"Al principio tenía miedo de que fuera complicado, pero en 5 minutos ya estaba registrando a mis alumnos. Mi hermana que tampoco sabe de computadoras también lo usa sola."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">RQ</div>
+          <div><div class="testi-name">Rosa Quispe</div><div class="testi-role">Directora, Nido Arco Iris · Wanchaq</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★☆</div>
+        <div class="testi-text">"Los pagos pendientes ya no se me escapan. El sistema me avisa automáticamente y los padres lo entienden mejor porque les llega su recibo al WhatsApp."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">LT</div>
+          <div><div class="testi-name">Lucía Torres</div><div class="testi-role">Directora, Nido Estrellitas · Santiago</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CHATBOT ────────────────────────────────────────────────────────────────── -->
+<section class="chat-section" id="chatbot">
+  <div style="max-width:1100px;margin:0 auto;text-align:center">
+    <div class="section-label">Asistente IA</div>
+    <div class="section-title">¿Tienes dudas? Pregúntale a Nina 🌿</div>
+    <p class="section-sub" style="margin:0 auto">
+      Nuestra asistente inteligente responde sobre el sistema, precios y cómo EduNido puede ayudar a tu nido.
+      Disponible 24/7. Puedes escribir o <strong>hablar directamente</strong> con ella.
+    </p>
+  </div>
+
+  <div class="chat-container">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-avatar">🌿</div>
+      <div>
+        <div class="chat-title">Nina — Asistente EduNido</div>
+        <div class="chat-status"><div class="online-dot"></div>En línea ahora</div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" id="chatMessages">
+      <div>
+        <div class="msg-label">Nina 🌿</div>
+        <div class="msg msg-bot">¡Hola! Soy Nina, tu asistente de EduNido. Estoy aquí para ayudarte a entender cómo nuestro sistema puede simplificar la gestión de tu nido en Cusco. ¿En qué te puedo ayudar hoy?</div>
+      </div>
+    </div>
+
+    <!-- Quick suggestions -->
+    <div class="chat-suggestions" id="chatSuggestions">
+      <button class="suggestion-btn" onclick="sendSuggestion(this)">¿Cómo funciona el plan gratis?</button>
+      <button class="suggestion-btn" onclick="sendSuggestion(this)">¿Es fácil de usar sin saber de tecnología?</button>
+      <button class="suggestion-btn" onclick="sendSuggestion(this)">¿Cómo controlo los pagos?</button>
+      <button class="suggestion-btn" onclick="sendSuggestion(this)">Quiero una demo</button>
+    </div>
+
+    <!-- Mic hint -->
+    <div class="mic-hint" id="micHint">🎤 Presiona el micrófono y habla — Nina te escucha</div>
+
+    <!-- Input area -->
+    <div class="chat-input-area">
+      <button class="chat-mic" id="micBtn" onclick="toggleVoice()" title="Hablar con Nina">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8"  y1="23" x2="16" y2="23"/>
+        </svg>
+      </button>
+      <input
+        class="chat-input"
+        id="chatInput"
+        type="text"
+        placeholder="Escribe o habla con Nina..."
+        onkeydown="if(event.key==='Enter') sendMessage()"
+      >
+      <button class="chat-send" onclick="sendMessage()" title="Enviar">
+        <svg viewBox="0 0 24 24">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ────────────────────────────────────────────────────────────────────── -->
+<section class="cta-section">
+  <div class="cta-box">
+    <div class="cta-title">Tu nido merece funcionar sin caos</div>
+    <p class="cta-sub">Únete a los primeros nidos de Cusco que ya digitalizaron su gestión. Empieza gratis hoy, sin tarjeta de crédito.</p>
+    <div class="cta-btns">
+      <button class="cta-btn-primary">Empezar gratis ahora</button>
+      <button class="cta-btn-secondary" onclick="document.getElementById('chatbot').scrollIntoView({behavior:'smooth'})">
+        Hablar con Nina
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─────────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-logo">Edu<span>Nido</span></div>
+  <div class="footer-links">
+    <a href="#">Privacidad</a>
+    <a href="#">Términos</a>
+    <a href="#">Soporte</a>
+    <a href="#">WhatsApp</a>
+  </div>
+  <div class="footer-copy">© 2025 EduNido · Hecho en Cusco 🌿</div>
+</footer>
+
+<!-- ─── SCRIPTS ────────────────────────────────────────────────────────────────── -->
+<!-- Orden importante: config primero (define constantes), luego chatbot y voice -->
+<script src="js/config.js"></script>
+<script src="js/chatbot.js"></script>
+<script src="js/voice.js"></script>
+
+</body>
+</html>
