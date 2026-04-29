@@ -1,4 +1,4 @@
-const OPENAI_API_KEY = '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';
+const OPENAI_API_KEY = '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';
 const OPENAI_CHAT_URL = 'https://api.openai.com/v1/chat/completions';
 const OPENAI_AUDIO_URL = 'https://api.openai.com/v1/audio/transcriptions';
 
