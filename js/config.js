@@ -1,6 +1,6 @@
 // Proxy seguro via Cloudflare Worker (la API Key está en Cloudflare, no aquí)
 // IMPORTANTE: Reemplaza esta URL con la de tu Worker después de crearlo
-const WORKER_URL = 'https://edunido-api.TU-USUARIO.workers.dev';
+const WORKER_URL = 'https://edunido-api.faridyrg16.workers.dev';
 const OPENAI_CHAT_URL = WORKER_URL + '/chat';
 const OPENAI_AUDIO_URL = WORKER_URL + '/audio';
 
