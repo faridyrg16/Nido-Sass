@@ -1,88 +1,113 @@
-// ─── ESTADO DEL MICRÓFONO ─────────────────────────────────────────────────────
+// ESTADO DEL MICRÓFONO
 let isRecording = false;
-let recognition = null;
+let mediaRecorder = null;
+let audioChunks = [];
 
-// ─── TOGGLE: iniciar o detener grabación ──────────────────────────────────────
-function toggleVoice() {
-  const hasAPI = ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window);
-  if (!hasAPI) {
-    showToast('Tu navegador no soporta voz. Usa Chrome o Edge.');
-    return;
+// iniciar o detener grabación
+async function toggleVoice() {
+  if (isRecording) {
+    stopRecording();
+  } else {
+    await startRecording();
   }
-  isRecording ? stopRecording() : startRecording();
 }
 
-// ─── INICIAR GRABACIÓN ────────────────────────────────────────────────────────
-function startRecording() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SpeechRecognition();
+// INICIAR GRABACIÓN 
+async function startRecording() {
+  try {
+    // Pedir permisos y obtener el flujo de audio
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-  // Configuración para español peruano
-  recognition.lang            = 'es-PE';
-  recognition.interimResults  = true;   // muestra texto mientras hablas
-  recognition.continuous      = false;  // para automáticamente al silencio
-  recognition.maxAlternatives = 1;
+    mediaRecorder = new MediaRecorder(stream);
+    audioChunks = [];
 
-  const micBtn = document.getElementById('micBtn');
-  const input  = document.getElementById('chatInput');
+    const micBtn = document.getElementById('micBtn');
 
-  // UI: estado "grabando"
-  micBtn.classList.add('recording');
-  micBtn.title = 'Hablando... (clic para detener)';
-  isRecording  = true;
-  showListeningBadge();
+    // UI: estado "grabando"
+    micBtn.classList.add('recording');
+    micBtn.title = 'Escuchando... (clic para enviar)';
+    isRecording = true;
+    showListeningBadge();
 
-  // Resultado de voz → texto
-  recognition.onresult = (event) => {
-    let transcript = '';
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      transcript += event.results[i][0].transcript;
-    }
-    input.value = transcript; // mostrar transcripción en tiempo real
-
-    // Cuando el resultado es final → enviar automáticamente
-    if (event.results[event.results.length - 1].isFinal) {
-      stopRecording();
-      const msg = transcript.trim();
-      if (msg) {
-        input.value = '';
-        removeListeningBadge();
-        appendMessage(msg, 'user');
-        getBotResponse(msg);
+    // Guardar los pedazos de audio
+    mediaRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunks.push(event.data);
       }
-    }
-  };
+    };
 
-  // Manejo de errores
-  recognition.onerror = (event) => {
-    stopRecording();
-    removeListeningBadge();
-    if (event.error === 'not-allowed') {
-      showToast('Permite el acceso al micrófono en tu navegador.');
-    } else if (event.error !== 'no-speech') {
-      showToast('No se entendió. Intenta hablar más despacio.');
-    }
-  };
+    // Al detener la grabación
+    mediaRecorder.onstop = async () => {
+      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
 
-  // Al terminar (por silencio o error)
-  recognition.onend = () => {
-    if (isRecording) stopRecording();
-    removeListeningBadge();
-  };
+      // Apagar la luz del micrófono del navegador
+      stream.getTracks().forEach(track => track.stop());
 
-  recognition.start();
+      removeListeningBadge();
+      micBtn.classList.remove('recording');
+      micBtn.title = 'Hablar con Nina';
+      isRecording = false;
+
+      // Enviar a Whisper API
+      await transcribeAudio(audioBlob);
+    };
+
+    mediaRecorder.start();
+  } catch (err) {
+    console.error('Error accediendo al micrófono:', err);
+    showToast('Permite el acceso al micrófono en tu navegador.');
+  }
 }
 
 // ─── DETENER GRABACIÓN ────────────────────────────────────────────────────────
 function stopRecording() {
-  isRecording = false;
-  const micBtn = document.getElementById('micBtn');
-  micBtn.classList.remove('recording');
-  micBtn.title = 'Hablar con Nina';
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop(); // Esto dispara el evento onstop
+  }
+}
 
-  if (recognition) {
-    try { recognition.stop(); } catch (e) { /* ignorar si ya paró */ }
-    recognition = null;
+// ─── TRANSCRIBIR AUDIO CON OPENAI WHISPER ─────────────────────────────────────
+async function transcribeAudio(audioBlob) {
+  showTyping(); // Usamos el typing indicator mientras transcribe
+
+  try {
+    const formData = new FormData();
+    formData.append('file', audioBlob, 'audio.webm');
+    formData.append('model', 'whisper-1');
+    formData.append('language', 'es'); // Forzamos español
+
+    const res = await fetch(OPENAI_AUDIO_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: formData
+    });
+
+    if (!res.ok) {
+      removeTyping();
+      console.error('Error Whisper:', await res.text());
+      showToast('Error al transcribir el audio.');
+      return;
+    }
+
+    const data = await res.json();
+    const transcript = data.text.trim();
+
+    removeTyping();
+
+    if (transcript) {
+      // Enviamos el mensaje transcrito al chat
+      appendMessage(transcript, 'user');
+      await getBotResponse(transcript);
+    } else {
+      showToast('No se escuchó nada, intenta de nuevo.');
+    }
+
+  } catch (err) {
+    console.error('Error de red transcribiendo:', err);
+    removeTyping();
+    showToast('Error de red al transcribir el audio.');
   }
 }
 
