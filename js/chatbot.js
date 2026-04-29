@@ -75,21 +75,6 @@ async function getBotResponse(userMsg) {
     }
   }
 
-  // Si no hay API key, usar fallback directo
-  const apiKey = getApiKey();
-  if (!apiKey) {
-    await new Promise(r => setTimeout(r, 500));
-    const fallback = FALLBACK_RESPONSES[Math.floor(Math.random() * FALLBACK_RESPONSES.length)];
-    conversationHistory.push({ role: 'user', content: userMsg });
-    conversationHistory.push({ role: 'assistant', content: fallback });
-    const formatted = fallback
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\n/g, '<br>');
-    appendMessage(formatted, 'bot');
-    unlockChat();
-    return;
-  }
-
   conversationHistory.push({ role: 'user', content: userMsg });
   showTyping();
 
@@ -109,8 +94,7 @@ async function getBotResponse(userMsg) {
     const res = await fetch(OPENAI_CHAT_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
     });

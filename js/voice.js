@@ -65,40 +65,6 @@ function stopRecording() {
 
 // ─── TRANSCRIBIR AUDIO CON OPENAI WHISPER ─────────────────────────────────────
 async function transcribeAudio(audioBlob) {
-  const apiKey = getApiKey();
-
-  // Sin API key: usar reconocimiento del navegador como fallback
-  if (!apiKey) {
-    removeTyping();
-    const hasAPI = ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window);
-    if (!hasAPI) {
-      showToast('Configura tu API Key de OpenAI para usar voz.');
-      return;
-    }
-    // Fallback: SpeechRecognition del navegador
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'es-PE';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-    showListeningBadge();
-    recognition.onresult = (event) => {
-      removeListeningBadge();
-      const transcript = event.results[0][0].transcript.trim();
-      if (transcript) {
-        appendMessage(transcript, 'user');
-        getBotResponse(transcript);
-      }
-    };
-    recognition.onerror = () => {
-      removeListeningBadge();
-      showToast('No se entendió. Intenta de nuevo.');
-    };
-    recognition.onend = () => removeListeningBadge();
-    recognition.start();
-    return;
-  }
-
   showTyping();
 
   try {
@@ -109,9 +75,6 @@ async function transcribeAudio(audioBlob) {
 
     const res = await fetch(OPENAI_AUDIO_URL, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`
-      },
       body: formData
     });
 
