@@ -103,17 +103,16 @@ async function getBotResponse(userMsg) {
     if (!res.ok) {
       removeTyping();
       conversationHistory.pop();
-      let errorBody = '';
-      try { errorBody = await res.text(); } catch (e) {}
-      console.error(`OpenAI HTTP error ${res.status}:`, errorBody);
+      console.error(`OpenAI HTTP error ${res.status}`);
 
-      if (res.status === 429) {
-        appendMessage('Recibí demasiadas preguntas seguidas 😅 Espera unos segundos e intenta de nuevo.', 'bot');
-      } else if (res.status === 401) {
-        appendMessage('⚠️ API Key inválida o expirada. Revisa tu llave en config.js o genera una nueva en platform.openai.com.', 'bot');
-      } else {
-        appendMessage(`Error del servidor (${res.status}). Intenta de nuevo en unos momentos.`, 'bot');
-      }
+      // Usar fallback local en vez de mostrar error
+      const fallback = FALLBACK_RESPONSES[Math.floor(Math.random() * FALLBACK_RESPONSES.length)];
+      conversationHistory.push({ role: 'user', content: userMsg });
+      conversationHistory.push({ role: 'assistant', content: fallback });
+      const formatted = fallback
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+      appendMessage(formatted, 'bot');
       unlockChat();
       return;
     }
@@ -136,16 +135,18 @@ async function getBotResponse(userMsg) {
     appendMessage(formatted, 'bot');
 
   } catch (err) {
-    console.error('Error de red:', err);
+    console.error('Error de red (usando fallback local):', err);
     removeTyping();
     conversationHistory.pop();
 
-    // Intentar leer la respuesta real del error (CORS bloquea 401 como network error)
-    if (err.message && err.message.includes('Failed to fetch')) {
-      appendMessage('⚠️ No se pudo conectar con OpenAI. Esto puede ser por una API Key inválida o un problema de red. Revisa tu llave en config.js.', 'bot');
-    } else {
-      appendMessage('Error de conexión: ' + err.message + '. Verifica tu red e intenta de nuevo. 🌐', 'bot');
-    }
+    // Usar respuesta fallback local en vez de mostrar error
+    const fallback = FALLBACK_RESPONSES[Math.floor(Math.random() * FALLBACK_RESPONSES.length)];
+    conversationHistory.push({ role: 'user', content: userMsg });
+    conversationHistory.push({ role: 'assistant', content: fallback });
+    const formatted = fallback
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+    appendMessage(formatted, 'bot');
   }
   unlockChat();
 }
