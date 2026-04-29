@@ -235,6 +235,18 @@
         <div class="chat-title">Nina — Asistente EduNido</div>
         <div class="chat-status"><div class="online-dot"></div>En línea ahora</div>
       </div>
+      <button class="chat-settings-btn" onclick="toggleApiPanel()" title="Configurar API Key">⚙️</button>
+    </div>
+
+    <!-- Panel de API Key (oculto por defecto) -->
+    <div class="api-key-panel" id="apiKeyPanel" style="display:none;">
+      <div style="font-size:0.8rem;font-weight:600;color:var(--text);margin-bottom:0.4rem;">🔑 API Key de OpenAI</div>
+      <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem;">Se guarda solo en tu navegador (nunca se sube a GitHub)</div>
+      <div style="display:flex;gap:0.4rem;">
+        <input type="password" id="apiKeyInput" placeholder="sk-..." style="flex:1;padding:0.4rem 0.6rem;border-radius:8px;border:1px solid rgba(0,0,0,0.1);font-size:0.75rem;font-family:inherit;">
+        <button onclick="saveApiKey()" style="padding:0.4rem 0.8rem;border-radius:8px;border:none;background:var(--accent);color:#fff;font-size:0.75rem;font-weight:600;cursor:pointer;">Guardar</button>
+      </div>
+      <div id="apiKeyStatus" style="font-size:0.7rem;margin-top:0.3rem;color:var(--muted);"></div>
     </div>
 
     <!-- Messages -->
@@ -314,6 +326,37 @@
 <script src="js/config.js"></script>
 <script src="js/chatbot.js"></script>
 <script src="js/voice.js"></script>
+<script>
+  // API Key panel logic
+  function toggleApiPanel() {
+    const panel = document.getElementById('apiKeyPanel');
+    const input = document.getElementById('apiKeyInput');
+    if (panel.style.display === 'none') {
+      panel.style.display = 'block';
+      const saved = getApiKey();
+      if (saved) input.value = saved;
+    } else {
+      panel.style.display = 'none';
+    }
+  }
+  function saveApiKey() {
+    const key = document.getElementById('apiKeyInput').value.trim();
+    const status = document.getElementById('apiKeyStatus');
+    if (key && key.startsWith('sk-')) {
+      setApiKey(key);
+      status.textContent = '✅ Guardada. Nina ahora usa ChatGPT.';
+      status.style.color = '#2d8a5e';
+    } else if (!key) {
+      localStorage.removeItem('edunido_api_key');
+      status.textContent = '🔄 Eliminada. Nina usará respuestas locales.';
+      status.style.color = 'var(--muted)';
+    } else {
+      status.textContent = '❌ La key debe empezar con sk-';
+      status.style.color = '#e74c3c';
+    }
+    setTimeout(() => { status.textContent = ''; }, 4000);
+  }
+</script>
 
 </body>
 </html>

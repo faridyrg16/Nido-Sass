@@ -63,7 +63,42 @@ function stopRecording() {
   }
 }
 
+// ─── TRANSCRIBIR AUDIO CON OPENAI WHISPER ─────────────────────────────────────
 async function transcribeAudio(audioBlob) {
+  const apiKey = getApiKey();
+
+  // Sin API key: usar reconocimiento del navegador como fallback
+  if (!apiKey) {
+    removeTyping();
+    const hasAPI = ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window);
+    if (!hasAPI) {
+      showToast('Configura tu API Key de OpenAI para usar voz.');
+      return;
+    }
+    // Fallback: SpeechRecognition del navegador
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-PE';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    showListeningBadge();
+    recognition.onresult = (event) => {
+      removeListeningBadge();
+      const transcript = event.results[0][0].transcript.trim();
+      if (transcript) {
+        appendMessage(transcript, 'user');
+        getBotResponse(transcript);
+      }
+    };
+    recognition.onerror = () => {
+      removeListeningBadge();
+      showToast('No se entendió. Intenta de nuevo.');
+    };
+    recognition.onend = () => removeListeningBadge();
+    recognition.start();
+    return;
+  }
+
   showTyping();
 
   try {
@@ -75,7 +110,7 @@ async function transcribeAudio(audioBlob) {
     const res = await fetch(OPENAI_AUDIO_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
+        'Authorization': `Bearer ${apiKey}`
       },
       body: formData
     });
@@ -83,7 +118,7 @@ async function transcribeAudio(audioBlob) {
     if (!res.ok) {
       removeTyping();
       console.error('Error Whisper:', await res.text());
-      showToast('Error al transcribir el audio.');
+      showToast('Error al transcribir. Intenta escribir tu mensaje.');
       return;
     }
 
@@ -93,7 +128,6 @@ async function transcribeAudio(audioBlob) {
     removeTyping();
 
     if (transcript) {
-
       appendMessage(transcript, 'user');
       await getBotResponse(transcript);
     } else {
@@ -101,11 +135,12 @@ async function transcribeAudio(audioBlob) {
     }
 
   } catch (err) {
-    console.error('Error de red transcribiendo:', err);
+    console.error('Error transcribiendo:', err);
     removeTyping();
-    showToast('Error de red al transcribir el audio.');
+    showToast('Error al transcribir. Intenta escribir tu mensaje.');
   }
 }
+
 
 
 function showListeningBadge() {

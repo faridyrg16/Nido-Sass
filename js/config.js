@@ -1,4 +1,6 @@
-const OPENAI_API_KEY = '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';
+// API Key se carga desde localStorage (nunca se sube a GitHub)
+function getApiKey() { return localStorage.getItem('edunido_api_key') || ''; }
+function setApiKey(key) { localStorage.setItem('edunido_api_key', key); }
 const OPENAI_CHAT_URL = 'https://api.openai.com/v1/chat/completions';
 const OPENAI_AUDIO_URL = 'https://api.openai.com/v1/audio/transcriptions';
 
