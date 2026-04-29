@@ -1,9 +1,9 @@
-// ESTADO DEL MICRÓFONO
+
 let isRecording = false;
 let mediaRecorder = null;
 let audioChunks = [];
 
-// iniciar o detener grabación
+
 async function toggleVoice() {
   if (isRecording) {
     stopRecording();
@@ -12,10 +12,9 @@ async function toggleVoice() {
   }
 }
 
-// INICIAR GRABACIÓN 
 async function startRecording() {
   try {
-    // Pedir permisos y obtener el flujo de audio
+
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
     mediaRecorder = new MediaRecorder(stream);
@@ -23,24 +22,24 @@ async function startRecording() {
 
     const micBtn = document.getElementById('micBtn');
 
-    // UI: estado "grabando"
+
     micBtn.classList.add('recording');
     micBtn.title = 'Escuchando... (clic para enviar)';
     isRecording = true;
     showListeningBadge();
 
-    // Guardar los pedazos de audio
+
     mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
         audioChunks.push(event.data);
       }
     };
 
-    // Al detener la grabación
+
     mediaRecorder.onstop = async () => {
       const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
 
-      // Apagar la luz del micrófono del navegador
+
       stream.getTracks().forEach(track => track.stop());
 
       removeListeningBadge();
@@ -48,7 +47,6 @@ async function startRecording() {
       micBtn.title = 'Hablar con Nina';
       isRecording = false;
 
-      // Enviar a Whisper API
       await transcribeAudio(audioBlob);
     };
 
@@ -59,22 +57,20 @@ async function startRecording() {
   }
 }
 
-// ─── DETENER GRABACIÓN ────────────────────────────────────────────────────────
 function stopRecording() {
   if (mediaRecorder && mediaRecorder.state === 'recording') {
-    mediaRecorder.stop(); // Esto dispara el evento onstop
+    mediaRecorder.stop();
   }
 }
 
-// ─── TRANSCRIBIR AUDIO CON OPENAI WHISPER ─────────────────────────────────────
 async function transcribeAudio(audioBlob) {
-  showTyping(); // Usamos el typing indicator mientras transcribe
+  showTyping();
 
   try {
     const formData = new FormData();
     formData.append('file', audioBlob, 'audio.webm');
     formData.append('model', 'whisper-1');
-    formData.append('language', 'es'); // Forzamos español
+    formData.append('language', 'es');
 
     const res = await fetch(OPENAI_AUDIO_URL, {
       method: 'POST',
@@ -97,7 +93,7 @@ async function transcribeAudio(audioBlob) {
     removeTyping();
 
     if (transcript) {
-      // Enviamos el mensaje transcrito al chat
+
       appendMessage(transcript, 'user');
       await getBotResponse(transcript);
     } else {
@@ -111,7 +107,7 @@ async function transcribeAudio(audioBlob) {
   }
 }
 
-// ─── BADGE "ESCUCHANDO..." EN EL CHAT ────────────────────────────────────────
+
 function showListeningBadge() {
   removeListeningBadge();
   const container = document.getElementById('chatMessages');
