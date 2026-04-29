@@ -134,12 +134,17 @@ const PREDEFINED_RESPONSES = [
   }
 ];
 
-// Respuesta cuando no se encuentra match (Fallback sin API)
+// Respuestas cuando no hay match local (Fallback si la API falla)
+let lastFallbackIndex = -1;
 const FALLBACK_RESPONSES = [
-  '¡Qué buena pregunta! Te cuento: EduNido digitaliza matrículas, pagos y horarios para nidos en Cusco. **Empieza gratis** y pruébalo tú misma. ¿Te gustaría saber más sobre alguna función? 🌿',
-  'Entiendo tu consulta. EduNido simplifica la gestión de tu nido con un sistema fácil desde el navegador. ¿Te gustaría que te explique sobre nuestros **planes** o alguna función específica? 😊',
-  'Gracias por tu interés en EduNido. Podemos ayudarte con matrículas, pagos y horarios, todo digital y sin complicaciones. ¿Qué te parece si **pruebas gratis** el sistema? 🚀',
-  'EduNido es la solución perfecta para tu nido. Funciona desde WhatsApp y el navegador, sin instalaciones. ¿Quieres saber sobre el **Plan Free (S/0)** o el **Plan Pro (S/50/mes)**? 💚'
+  'Hmm, eso está fuera de mi área 😅. Soy Nina y solo puedo ayudarte con la gestión de nidos: matrículas, pagos, horarios... ¿Te cuento sobre alguna de estas funciones?',
+  'Disculpa, no tengo información sobre eso. Mi especialidad es ayudarte con la **gestión de tu nido**. ¿Tienes alguna duda sobre EduNido? 🌿',
+  'Uy, eso no lo manejo 😊. Pero si necesitas ayuda con matrículas, cobros o horarios de tu nido, ¡ahí sí soy experta! ¿En qué te ayudo?',
+  'No puedo ayudarte con eso, pero sí con todo lo relacionado a la gestión de jardines de infancia. ¿Quieres saber cómo **EduNido** puede simplificar tu trabajo? 💚',
+  'Esa pregunta se escapa de lo que sé 😅. Yo me especializo en ayudar a directoras de nidos en Cusco. ¿Tienes alguna duda sobre nuestros planes o funciones?',
+  'Lo siento, no tengo respuesta para eso. Pero puedo contarte todo sobre cómo digitalizar la gestión de tu nido. ¿Qué te gustaría saber? 🌿',
+  'Mmm, eso no es algo en lo que pueda ayudarte. ¿Pero sabías que puedes gestionar matrículas, pagos y horarios desde tu celular con EduNido? Pregúntame sobre eso 😊',
+  'No manejo ese tema, disculpa. Mi fuerte es ayudar con la administración de nidos y jardines. ¿Te interesa saber sobre precios, funciones o cómo empezar? ✨'
 ];
 
 // System Prompts

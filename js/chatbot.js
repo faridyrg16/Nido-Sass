@@ -105,7 +105,7 @@ async function getBotResponse(userMsg) {
       console.error(`OpenAI HTTP error ${res.status}`);
 
       // Usar fallback local en vez de mostrar error
-      const fallback = FALLBACK_RESPONSES[Math.floor(Math.random() * FALLBACK_RESPONSES.length)];
+      const fallback = getNextFallback();
       conversationHistory.push({ role: 'user', content: userMsg });
       conversationHistory.push({ role: 'assistant', content: fallback });
       const formatted = fallback
@@ -148,6 +148,15 @@ async function getBotResponse(userMsg) {
     appendMessage(formatted, 'bot');
   }
   unlockChat();
+}
+
+function getNextFallback() {
+  let idx;
+  do {
+    idx = Math.floor(Math.random() * FALLBACK_RESPONSES.length);
+  } while (idx === lastFallbackIndex && FALLBACK_RESPONSES.length > 1);
+  lastFallbackIndex = idx;
+  return FALLBACK_RESPONSES[idx];
 }
 
 function appendMessage(text, role) {
