@@ -54,10 +54,14 @@ async function getBotResponse(userMsg) {
   lockChat();
 
   // 1. Revisar respuestas pre-cargadas primero
-  const lowerMsg = userMsg.toLowerCase();
+  const lowerMsg = userMsg.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   if (typeof PREDEFINED_RESPONSES !== 'undefined') {
     for (const item of PREDEFINED_RESPONSES) {
-      if (item.keywords.some(kw => lowerMsg.includes(kw))) {
+      if (item.keywords.some(kw => {
+        const kwNorm = kw.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const regex = new RegExp('\\b' + kwNorm + '\\b', 'i');
+        return regex.test(lowerMsg);
+      })) {
         showTyping();
         await new Promise(r => setTimeout(r, 600));
 
