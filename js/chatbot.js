@@ -1,7 +1,9 @@
 let conversationHistory = [];
+let isBotResponding = false;
 
 //Enviar Mensaje
 async function sendMessage() {
+  if (isBotResponding) return;
   const input = document.getElementById('chatInput');
   const msg = input.value.trim();
   if (!msg) return;
@@ -13,6 +15,7 @@ async function sendMessage() {
 }
 
 function sendSuggestion(btn) {
+  if (isBotResponding) return;
   const msg = btn.textContent;
   hideMicHintAndSuggestions();
   appendMessage(msg, 'user');
@@ -26,8 +29,30 @@ function hideMicHintAndSuggestions() {
   if (sugg) sugg.style.display = 'none';
 }
 
-//Res puestas pre guardadas
+function lockChat() {
+  isBotResponding = true;
+  const input = document.getElementById('chatInput');
+  const sendBtn = document.querySelector('.chat-send');
+  const micBtn = document.getElementById('micBtn');
+  if (input) { input.disabled = true; input.placeholder = 'Nina está escribiendo...'; }
+  if (sendBtn) { sendBtn.disabled = true; sendBtn.style.opacity = '0.4'; sendBtn.style.pointerEvents = 'none'; }
+  if (micBtn) { micBtn.disabled = true; micBtn.style.opacity = '0.4'; micBtn.style.pointerEvents = 'none'; }
+}
+
+function unlockChat() {
+  isBotResponding = false;
+  const input = document.getElementById('chatInput');
+  const sendBtn = document.querySelector('.chat-send');
+  const micBtn = document.getElementById('micBtn');
+  if (input) { input.disabled = false; input.placeholder = 'Escribe o habla con Nina...'; input.focus(); }
+  if (sendBtn) { sendBtn.disabled = false; sendBtn.style.opacity = '1'; sendBtn.style.pointerEvents = 'auto'; }
+  if (micBtn) { micBtn.disabled = false; micBtn.style.opacity = '1'; micBtn.style.pointerEvents = 'auto'; }
+}
+
+//Respuestas pre guardadas
 async function getBotResponse(userMsg) {
+  lockChat();
+
   // 1. Revisar respuestas pre-cargadas primero
   const lowerMsg = userMsg.toLowerCase();
   if (typeof PREDEFINED_RESPONSES !== 'undefined') {
@@ -44,6 +69,7 @@ async function getBotResponse(userMsg) {
           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
           .replace(/\n/g, '<br>');
         appendMessage(formatted, 'bot');
+        unlockChat();
         return;
       }
     }
@@ -77,14 +103,18 @@ async function getBotResponse(userMsg) {
     if (!res.ok) {
       removeTyping();
       conversationHistory.pop();
+      let errorBody = '';
+      try { errorBody = await res.text(); } catch (e) {}
+      console.error(`OpenAI HTTP error ${res.status}:`, errorBody);
+
       if (res.status === 429) {
         appendMessage('Recibí demasiadas preguntas seguidas 😅 Espera unos segundos e intenta de nuevo.', 'bot');
       } else if (res.status === 401) {
-        appendMessage('Hay un problema con la llave de acceso (API Key). Por favor revisa la configuración.', 'bot');
+        appendMessage('⚠️ API Key inválida o expirada. Revisa tu llave en config.js o genera una nueva en platform.openai.com.', 'bot');
       } else {
         appendMessage(`Error del servidor (${res.status}). Intenta de nuevo en unos momentos.`, 'bot');
       }
-      console.error(`OpenAI HTTP error ${res.status}:`, await res.text());
+      unlockChat();
       return;
     }
 
@@ -109,8 +139,15 @@ async function getBotResponse(userMsg) {
     console.error('Error de red:', err);
     removeTyping();
     conversationHistory.pop();
-    appendMessage('Sin conexión a internet. Verifica tu red e intenta de nuevo. 🌐', 'bot');
+
+    // Intentar leer la respuesta real del error (CORS bloquea 401 como network error)
+    if (err.message && err.message.includes('Failed to fetch')) {
+      appendMessage('⚠️ No se pudo conectar con OpenAI. Esto puede ser por una API Key inválida o un problema de red. Revisa tu llave en config.js.', 'bot');
+    } else {
+      appendMessage('Error de conexión: ' + err.message + '. Verifica tu red e intenta de nuevo. 🌐', 'bot');
+    }
   }
+  unlockChat();
 }
 
 function appendMessage(text, role) {
