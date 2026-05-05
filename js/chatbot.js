@@ -57,11 +57,18 @@ async function getBotResponse(userMsg) {
   const lowerMsg = userMsg.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   if (typeof PREDEFINED_RESPONSES !== 'undefined') {
     for (const item of PREDEFINED_RESPONSES) {
-      if (item.keywords.some(kw => {
+      // Buscar coincidencia más flexible: palabra clave como substring o palabra completa
+      const isMatched = item.keywords.some(kw => {
         const kwNorm = kw.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        // Buscar como palabra completa primero, si no, como substring
         const regex = new RegExp('\\b' + kwNorm + '\\b', 'i');
-        return regex.test(lowerMsg);
-      })) {
+        if (regex.test(lowerMsg)) return true;
+        
+        // Si no coincide como palabra, buscar como substring (para frases)
+        return lowerMsg.includes(kwNorm);
+      });
+
+      if (isMatched) {
         showTyping();
         await new Promise(r => setTimeout(r, 600));
 
@@ -143,7 +150,7 @@ async function getBotResponse(userMsg) {
     conversationHistory.pop();
 
     // Usar respuesta fallback local en vez de mostrar error
-    const fallback = FALLBACK_RESPONSES[Math.floor(Math.random() * FALLBACK_RESPONSES.length)];
+    const fallback = getNextFallback();
     conversationHistory.push({ role: 'user', content: userMsg });
     conversationHistory.push({ role: 'assistant', content: fallback });
     const formatted = fallback
