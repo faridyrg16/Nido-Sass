@@ -33,7 +33,15 @@ const PREDEFINED_RESPONSES = [
   {
     keywords: ['demo', 'demostracion', 'demostración', 'ver', 'probar', 'quiero demo', 'muéstrame', 'muestrame'],
     response: 'Perfecto 🙌 te muestro cómo funciona en minutos, escríbeme y agendamos ahora 👉 https://wa.me/519295609206'
-  }
+  },
+  {
+  keywords: ['otro', 'no entiendo', 'cualquier cosa'],
+  response: 'No manejo ese tema 😊 pero sí puedo ayudarte a ordenar matrículas, pagos y horarios en minutos. ¿Prefieres probar gratis o ver una demo? 👉 https://wa.me/519295609206'
+},
+{
+  keywords: ['fuera de tema', 'random', 'xd'],
+  response: 'Ahora mismo me enfoco en ayudarte con tu nido 🌿 y ahorrarte tiempo en la gestión diaria. ¿Te muestro cómo funciona gratis? 👉 https://wa.me/519295609206'
+}
 ];
 
 // Respuestas cuando no hay match local (Fallback si la API falla)
