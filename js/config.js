@@ -1,10 +1,7 @@
-// Proxy seguro via Cloudflare Worker (la API Key está en Cloudflare, no aquí)
-// IMPORTANTE: Reemplaza esta URL con la de tu Worker después de crearlo
 const WORKER_URL = 'https://edunido-api.faridyrg16.workers.dev';
 const OPENAI_CHAT_URL = WORKER_URL + '/chat';
 const OPENAI_AUDIO_URL = WORKER_URL + '/audio';
 
-//Respuestas pre-cargadas (solo las esenciales - respuestas rápidas)
 const PREDEFINED_RESPONSES = [
   {
     keywords: ['hola', 'buenos dias', 'buenas tardes', 'buenas noches', 'saludos', 'hey', 'hi', 'ola', 'buenos', 'buenas'],
@@ -36,7 +33,7 @@ const PREDEFINED_RESPONSES = [
   }
 ];
 
-// Respuestas fallback MÍNIMAS (solo cuando la API falla, no como respuesta normal)
+
 let lastFallbackIndex = -1;
 const FALLBACK_RESPONSES = [
   'Hmm, parece que tuve un problema técnico momentáneo. ¿Podrías escribirme de nuevo? 😊 O mejor aún, contáctame directo por WhatsApp 👉 https://wa.me/519295609206',
@@ -44,7 +41,6 @@ const FALLBACK_RESPONSES = [
   'Error momentáneo de mi parte 😅. Por favor intenta de nuevo o contáctame por WhatsApp 👉 https://wa.me/519295609206'
 ];
 
-// System Prompt mejorado - MÁS CONTEXTUAL Y FLEXIBLE
 const SYSTEM_PROMPT = `Eres Nina, asesora comercial de EduNido, un sistema SaaS para jardines de infancia en Cusco. 
 
 Tu objetivo principal es ayudar a directoras de nidos con información sobre gestión educativa y cerrar conversaciones en una prueba gratis o demo por WhatsApp.
